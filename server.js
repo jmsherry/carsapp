@@ -9,7 +9,10 @@ const apiRoot = "/api/";
 const version = "v1";
 const fullAPIRoot = apiRoot + version;
 
-const { MONGODB_URI } = process.env;
+const {
+  PORT = 3333,
+  MONGODB_URI = "mongodb://localhost/cars_jump",
+} = process.env;
 
 // const MONGODB_URI = process.env.MONGODB_URI
 
@@ -25,10 +28,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 mongoose.Promise = global.Promise;
-const promise = mongoose.connect(
-  MONGODB_URI || "mongodb://localhost/cars_jump",
-  { useNewUrlParser: true }
-);
+const promise = mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 
 promise
   .then(function (db) {
