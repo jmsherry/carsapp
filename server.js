@@ -91,7 +91,7 @@ app.get(`${fullAPIRoot}/cars/:id?`, (req, res) => {
 app.post(`${fullAPIRoot}/cars/`, (req, res) => {
   const carData = req.body;
 
-  if (carData.avatar_url.startsWith('data:image')) {
+  if (carData.avatar_url && carData.avatar_url.startsWith('data:image')) {
     return res.status(400).send("NO_DATA_URIS_FOR_AVATAR");
   } 
 
@@ -117,6 +117,10 @@ app.post(`${fullAPIRoot}/cars/`, (req, res) => {
 app.put(`${fullAPIRoot}/cars/:id`, (req, res) => {
   const updateData = req.body;
   console.log(`Updating ${req.params.id}`, updateData);
+
+  if (updateData.avatar_url && updateData.avatar_url.startsWith('data:image')) {
+    return res.status(400).send("NO_DATA_URIS_FOR_AVATAR");
+  } 
 
   const isEmpty = req.body // 👈 null and undefined check
   && Object.keys(req.body).length === 0
