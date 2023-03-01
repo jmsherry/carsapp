@@ -8,6 +8,8 @@ const apiRoot = "/api/";
 const version = "v1";
 const fullAPIRoot = apiRoot + version;
 
+const MAX_STRING_LENGTH = 50;
+
 const { PORT = 3333, MONGODB_URI = "mongodb://localhost/cars_jump" } =
   process.env;
 
@@ -42,14 +44,17 @@ const carSchema = new Schema({
   name: {
     type: String,
     required: true,
+    maxLength: MAX_STRING_LENGTH, // 50
   },
   bhp: {
     type: Number,
     required: true,
+    max: 10000
   },
   avatar_url: {
     type: String,
     default: "https://static.thenounproject.com/png/449586-200.png",
+    maxLength: MAX_STRING_LENGTH * 10,
   },
 });
 
@@ -59,17 +64,21 @@ const driverSchema = new Schema({
   firstname: {
     type: String,
     required: true,
+    maxLength: MAX_STRING_LENGTH, // 50
   },
   lastname: {
     type: String,
     required: true,
+    maxLength: MAX_STRING_LENGTH,
   },
   age: {
     type: Number,
     required: true,
+    min: 0,
+    max: 100,
   },
   email: {
-    type: String,
+    type: String, // Must be an email address
     required: true,
   },
 });
@@ -97,15 +106,24 @@ app.post(`${fullAPIRoot}/cars/`, (req, res) => {
 
   if (!carData.name) {
     return res.status(400).send("NO_NAME_PROVIDED");
+  } else if (carData.name.length > MAX_STRING_LENGTH) {
+    return res.status(400).send(`NAME_TOO_LONG(${MAX_STRING_LENGTH} max)`);
   }
 
   if (!carData.bhp) {
     return res.status(400).send("NO_BHP_PROVIDED");
+  } else if (`${carData.bhp}`.length > 5) {
+    return res.status(400).send("BHP_TOO_GREAT");
   }
 
   if (carData.avatar_url === "") {
     delete carData.avatar_url;
-  } 
+  } else if (!carData.avatar_url.startsWith('http')) {
+    return res.status(400).send("AVATAR_URL_MUST_BE_URL");
+  } else if (carData.avatar_url.length > 200) {
+    return res.status(400).send("AVATAR_URL_MUST_BE_LESS_THAN_200_CHARACTERS");
+  }
+  
 
   const car = new Car(carData);
   car.save(function (err, newCar) {
