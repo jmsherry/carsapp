@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CarsApp Schema</title>
+</head>
+<body>
+  <ul>
+    <li>
+      <h2>Cars API</h2>
+      <pre>
+        <code>
+          {
+            name: {
+              type: String,
+              required: true,
+              maxLength: MAX_STRING_LENGTH, // 50
+            },
+            bhp: {
+              type: Number,
+              required: true,
+              max: 10000
+            },
+            avatar_url: {
+              type: String,
+              default: "https://static.thenounproject.com/png/449586-200.png",
+              maxLength: MAX_STRING_LENGTH * 10,
+            },
+          }
+        </code>
+      </pre>
+    </li>
+    <li>
+      <h2>Drivers API</h2>
+      <pre>
+        <code>
+          {
+            firstname: {
+              type: String,
+              required: true,
+              maxLength: MAX_STRING_LENGTH, // 50
+            },
+            lastname: {
+              type: String,
+              required: true,
+              maxLength: MAX_STRING_LENGTH,
+            },
+            age: {
+              type: Number,
+              required: true,
+              min: 0,
+              max: 100,
+            },
+            email: {
+              type: String, // Must be an email address
+              required: true,
+            },
+          }
+        </code>
+      </pre>
+    </li>
+  </ul>
+</body>
+</html>
