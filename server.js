@@ -49,7 +49,7 @@ const carSchema = new Schema({
   bhp: {
     type: Number,
     required: true,
-    max: 10000
+    max: 10000,
   },
   avatar_url: {
     type: String,
@@ -100,9 +100,9 @@ app.get(`${fullAPIRoot}/cars/:id?`, (req, res) => {
 app.post(`${fullAPIRoot}/cars/`, (req, res) => {
   const carData = req.body;
 
-  if (carData.avatar_url && carData.avatar_url.startsWith('data:image')) {
+  if (carData.avatar_url && carData.avatar_url.startsWith("data:image")) {
     return res.status(400).send("NO_DATA_URIS_FOR_AVATAR");
-  } 
+  }
 
   if (!carData.name) {
     return res.status(400).send("NO_NAME_PROVIDED");
@@ -116,14 +116,17 @@ app.post(`${fullAPIRoot}/cars/`, (req, res) => {
     return res.status(400).send("BHP_TOO_GREAT");
   }
 
-  if (carData.avatar_url === "") {
-    delete carData.avatar_url;
-  } else if (!carData.avatar_url.startsWith('http')) {
-    return res.status(400).send("AVATAR_URL_MUST_BE_URL");
-  } else if (carData.avatar_url.length > 200) {
-    return res.status(400).send("AVATAR_URL_MUST_BE_LESS_THAN_200_CHARACTERS");
+  if (carData.avatar_url) {
+    if (carData.avatar_url === "") {
+      delete carData.avatar_url;
+    } else if (!carData.avatar_url.startsWith("http")) {
+      return res.status(400).send("AVATAR_URL_MUST_BE_URL");
+    } else if (carData.avatar_url.length > 200) {
+      return res
+        .status(400)
+        .send("AVATAR_URL_MUST_BE_LESS_THAN_200_CHARACTERS");
+    }
   }
-  
 
   const car = new Car(carData);
   car.save(function (err, newCar) {
@@ -136,13 +139,14 @@ app.put(`${fullAPIRoot}/cars/:id`, (req, res) => {
   const updateData = req.body;
   console.log(`Updating ${req.params.id}`, updateData);
 
-  if (updateData.avatar_url && updateData.avatar_url.startsWith('data:image')) {
+  if (updateData.avatar_url && updateData.avatar_url.startsWith("data:image")) {
     return res.status(400).send("NO_DATA_URIS_FOR_AVATAR");
-  } 
+  }
 
-  const isEmpty = req.body // 👈 null and undefined check
-  && Object.keys(req.body).length === 0
-  && Object.getPrototypeOf(req.body) === Object.prototype
+  const isEmpty =
+    req.body && // 👈 null and undefined check
+    Object.keys(req.body).length === 0 &&
+    Object.getPrototypeOf(req.body) === Object.prototype;
 
   if (isEmpty) {
     return res.status(400).send("No update data provided");
