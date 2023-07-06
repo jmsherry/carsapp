@@ -5,10 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:dev": "nodemon server.js"
+    "start:dev": "nodemon server.js",
+    "start": "node server.js"
   },
   "engines": {
-    "node": "14.17.3"
+    "node": "^14.17.3"
   },
   "keywords": [],
   "author": "",
@@ -17,7 +18,9 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-validator": "^6.12.1",
-    "mongoose": "^5.13.9"
+    "lodash": "^4.17.21",
+    "mongoose": "^5.13.9",
+    "validator": "^13.6.0"
   },
   "devDependencies": {
     "event-stream": "^4.0.1",
