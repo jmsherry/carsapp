@@ -116,7 +116,7 @@ app.post(`${fullAPIRoot}/cars/`, (req, res) => {
     return res.status(400).send("BHP_TOO_GREAT");
   }
 
-  if (carData.avatar_url === "") {
+  if (!carData.avatar_url.length) {
     delete carData.avatar_url;
   } else if (!carData.avatar_url.startsWith('http')) {
     return res.status(400).send("AVATAR_URL_MUST_BE_URL");
