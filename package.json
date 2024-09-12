@@ -9,7 +9,7 @@
     "start": "node server.js"
   },
   "engines": {
-    "node": "^14.17.3"
+    "node": "^18.17.1"
   },
   "keywords": [],
   "author": "",
